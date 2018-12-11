@@ -1,0 +1,34 @@
+[
+  {
+    'db_img':"/static/images1/lunbo1.png",
+    'db_img_detail':'把握时机',
+    'db_trackid':'101',
+  },
+
+  {
+    'db_img':"/static/images1/lunbo2.png",
+    'db_img_detail':'满0减10',
+    'db_trackid':'102',
+  },
+  {
+    'db_img':"/static/images1/lunbo3.png",
+    'db_img_detail':'360全景相机',
+    'db_trackid':'103',
+  },
+  {
+    'db_img':"/static/images1/lunbo4.png",
+    'db_img_detail':'纸尿裤特价',
+    'db_trackid':'104',
+  },
+  {
+    'db_img':"/static/images1/lunbo5.png",
+    'db_img_detail':'年货节',
+    'db_trackid':'105',
+  },
+    {
+    'db_img':"/static/images1/lunbo6.png",
+    'db_img_detail':'beats耳机',
+    'db_trackid':'106',
+  }
+
+]

@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>MMLOO | 上传头像</title>
+</head>
+<body>
+<form action="{% url 'mmloo_shop:uploadheadimg' %}" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <input type="file" name="headimg"> <input type="submit" value="上传">
+
+
+
+</form>
+</body>
+</html>
