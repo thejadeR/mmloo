@@ -277,10 +277,16 @@ em.cart, em.collect, em.menu {
     width: 990px;
     margin: 0 auto;
 }
+
+
+/*商品栏*/
 .cnt-h {
     height: 52px;
     line-height: 52px;
 }
+
+
+
 .cnt-h li {
     color: #3c3c3c;
     padding: 0 15px;
@@ -488,7 +494,31 @@ label {
     height: 50px;
     line-height: 50px;
     background: #e5e5e5;
+    /*新加*/
+    position: absolute;
+    bottom: 300px;
+    left: 236px;
+
 }
+/*新加*/
+.m-gds-f  li{
+    margin-right: 50px;
+
+}
+.m-gds-f .account-bg
+{
+    margin-left: 20px;
+    margin-right: 0;
+}
+
+.gds-pay-rgt  li:last-child
+{
+    margin-right: 0;
+}
+
+/*//*/
+
+
 .m-gds-f li label {
     position: relative;
     top: 3px;
@@ -557,10 +587,15 @@ label {
 }
 
 
+
+
 /*合作伙伴/版权*/
 .g-f {
 	width: 1190px;
 	margin: 20px auto;
+    position: absolute;
+    bottom: 50px;
+    left: 115px;
 }
 .f-m-ptn {
 	border-top: 1px solid #dddddd;
@@ -577,19 +612,31 @@ label {
 }
 .f-u-ptn1 {
 	margin: 15px 0 7.5px 0;
+    /*新加*/
+    text-align: center;
 }
 .f-u-ptn1 a:first-child, .f-u-ptn2 a:first-child {
 	padding-left: 4px;
 }
+
 .f-u-ptn2 {
 	margin: 7.5px 0 15px 0;
+    /*新加*/
+    text-align: center;
 }
+
+
+
+
+
 
 /*版权*/
 .f-m-copy {
 	
 }
 .f-u-frd {
+    /*新加*/
+    text-align: center;
 	padding: 12px 0 7px 0;
 	color: #6c6c6c;
 }
@@ -612,6 +659,8 @@ label {
 }
 
 .f-u-info {
+    /*新加*/
+    text-align: center;
 	padding: 7px 0 14px 0;
 }
 .f-u-info a {
@@ -629,6 +678,8 @@ label {
 }
 .f-m-copy p {
 	color: #6c6c6c;
+    /*新加*/
+    /*text-align: center;*/
 }
 .f-m-copy i.plice {
 	position: relative;
@@ -642,9 +693,18 @@ label {
 
 
 
+.cnt-h
+{
+    text-align: center;
+    position: absolute;
+    top: 180px;
+    left: 236px;
+}
 
-
-
+.cnt-h li
+{
+    margin-right: 100px;
+}
 
 
 

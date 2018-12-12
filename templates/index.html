@@ -20,25 +20,25 @@
     <div class="public-main">
         <!-- 登录注册 -->
         <div class="user-entry">
-{#            {% if uesr %}#}
-{#                <span class="login">#}
-{#                    <a href="{% url 'mmloo_shop:login' %}" target="_blank">{{ user.db_uname }}</a>#}
-{#                </span>#}
-{#            {% else %}#}
+            {#            {% if uesr %}#}
+            {#                <span class="login">#}
+            {#                    <a href="{% url 'mmloo_shop:login' %}" target="_blank">{{ user.db_uname }}</a>#}
+            {#                </span>#}
+            {#            {% else %}#}
 
-                <span class="login">
+            <span class="login">
                     <a href="{% url 'mmloo_shop:login' %}" target="_blank">
                         {{ utel | default:'登陆' }}
                     </a>
                 </span>
-{#            {% endif %}#}
+            {#            {% endif %}#}
 
             <span class="reg">
                         <a href="{% url 'mmloo_shop:register' %}" target="_blank">注册</a>
                     </span>
             {% if utel %}
                 <span class="logout">
-                        <a href="{% url 'mmloo_shop:logout' %}" >退出登陆</a>
+                        <a href="{% url 'mmloo_shop:logout' %}">退出登陆</a>
                     </span>
             {% endif %}
 
@@ -968,7 +968,8 @@
                             </a>
                         </h2>
                     {% else %}
-                        <h2 class="person"><a href="{% url 'mmloo_shop:login' %}"><img src="/static/uploadfiles/headimg/person.png" alt="头像"></a></h2>
+                        <h2 class="person"><a href="{% url 'mmloo_shop:login' %}"><img
+                                src="/static/uploadfiles/headimg/person.png" alt="头像"></a></h2>
                     {% endif %}
 
 
@@ -1011,8 +1012,16 @@
             <li>
                 <a class="imgs" href="#"><img src="/static/images1/muying.jpg" alt=""></a>
             </li>
+            {#            任务，商品展示一，iPhone6s#}
             <li>
-                <a class="imgs" href="#"><img src="/static/images1/iphone6.jpg" alt=""></a>
+                {% for good in goods %}
+                    {% if good.goodid == 1 %}
+                        <a class="imgs" href="{% url 'mmloo_shop:details' 1 %}"><img src="/static/{{ good.good_img }}"
+                                                                                     alt="iphone6s"></a>
+                    {% endif %}
+                {% endfor %}
+
+
             </li>
             <li>
                 <a class="imgs" href="#"><img src="/static/images1/meishi.jpg" alt=""></a>
@@ -1199,18 +1208,32 @@
                             </div>
                         </li>
                     </ul>
+
+                    {#                    //商品栏#}
                     <ul class="midimgs4">
                         <li><a href="#"><img src="/static/images2/projector2.jpg" alt=""></a></li>
                         <li><a href="#"><img src="/static/images2/luyouqi.jpg" alt=""></a></li>
                         <li>
-                            <a href="#"><img src="/static/images2/blackpen.jpg" alt=""></a>
-                            <p>得力(deli)7083 安全石墨铅芯素描 绘图HB铅笔/学生铅笔 </p>
-                            <span>￥8.80</span><strike>￥12.00</strike>
+                            {% for good in goods %}
+                                {% if good.goodid == 2 %}
+                                    <a href="{% url 'mmloo_shop:details' 2 %}"><img
+                                            src="/static/{{ good.good_img }}" alt="学生铅笔"></a>
+                                    <p>{{ good.good_detail }}</p>
+                                    <span>￥{{ good.good_price }}</span><strike>￥{{ good.market_price }}</strike>
+                                {% endif %}
+                            {% endfor %}
+
                         </li>
                         <li>
-                            <a href="#"><img src="/static/images2/childrenpen.jpg" alt=""></a>
-                            <p>Deli/得力 7063水彩笔三角笔杆18色大容量可水洗 学生绘</p>
-                            <span>￥14.80</span><strike>￥19.00</strike>
+                            {% for good in goods %}
+                                {% if good.goodid == 3 %}
+                                    <a href="{% url 'mmloo_shop:details' 3 %}"><img
+                                            src="/static/{{ good.good_img }}" alt=""></a>
+                                    <p>{{ good.good_detail }}</p>
+                                    <span>￥{{ good.good_price }}</span><strike>￥{{ good.market_price }}</strike>
+                                {% endif %}
+                            {% endfor %}
+
                         </li>
                     </ul>
                 </li>
@@ -1222,17 +1245,31 @@
                         <li><a href="#"><img src="/static/images2/diannaobao.jpg" alt=""></a></li>
                         <li><a href="#"><img src="/static/images2/guoshu.jpg" alt=""></a></li>
                         <li>
-                            <a href="#"><img src="/static/images2/bianlitie.jpg" alt=""></a>
-                            <p>得力（deli） 7151 便签纸/便签本/便利贴/百事贴/易事贴 </p>
-                            <span>￥9.90</span><strike>￥15.00</strike>
+                            {% for good in goods %}
+                                {% if good.goodid == 4 %}
+                                    <a href="{% url 'mmloo_shop:details' 4 %}"><img src="/static/{{ good.good_img }}"
+                                                                                    alt=""></a>
+                                    <p>{{ good.good_detail }}</p>
+                                    <span>￥{{ good.good_price }}</span><strike>￥{{ good.market_price }}</strike>
+                                {% endif %}
+                            {% endfor %}
+
                         </li>
                         <li>
-                            <a href="#"><img src="/static/images2/zhihe.jpg" alt=""></a>
-                            <p>得力（deli）7702 便签纸/便条纸(147×101mm) 单本装</p>
-                            <span>￥5.90</span><strike>￥11.00</strike>
+                            {% for good in goods %}
+                                {% if good.goodid == 5 %}
+                                    <a href="{% url 'mmloo_shop:details' 5 %}"><img src="/static/{{ good.good_img }}"
+                                                                                    alt=""></a>
+                                    <p>{{ good.good_detail }}</p>
+                                    <span>￥{{ good.good_price }}</span><strike>￥{{ good.market_price }}</strike>
+                                {% endif %}
+                            {% endfor %}
+
                         </li>
                     </ul>
                 </li>
+
+
                 <ul class="randarea">
                     <li class="goods-rgt">
                         <h4>本周排行榜</h4><em class="lft"></em><em class="rgt"></em>

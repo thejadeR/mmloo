@@ -8,7 +8,7 @@ from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 
 # Create your views here.
-from mmloo_shop.models import UserInfo, Lunbo
+from mmloo_shop.models import UserInfo, Lunbo, Good, Cart
 from mysite14 import settings
 
 
@@ -16,24 +16,11 @@ def index(request):
     # 获取轮播图数据
     data = {}
     lunbos = Lunbo.objects.all()
-
     data['lunbos']=lunbos
 
-    # 获取导航数据
-    # navs = Nav.objects.all()
-    #
-    # # 获取每日必购数据
-    # mustbuys = Mustbuy.objects.all()
-    #
-    # # 商品部分数据
-    # shops = Shop.objects.all()  # 所有
-    # shophead = shops[0]
-    # shoptabs = shops[1:3]
-    # shopclass = shops[3:7]
-    # shopcommends = shops[7:11]
+    goods = Good.objects.all()
+    data['goods'] = goods
 
-    # 商品列表
-    # mainShows = MainShow.objects.all()
     token = request.session.get('token')
 
     if token:
@@ -155,10 +142,74 @@ def checkutel(request):
 
 
 def cart(request):
-    if request.method == 'GET':
-        return render(request, 'tb-cart.html')
+    # if request.method == 'GET':
+    token = request.session.get('token')
+    if token:
+        user = UserInfo.objects.get(db_token=token)
+        carts = Cart.objects.filter(user=user).exclude(number=0)
+        return render(request, 'tb-cart.html',context={
+            'user':user,
+            'carts': carts
+        })
+    else:
+        return redirect('mmloo_shop:login')
 
 
-def details(request):
-    if request.method == 'GET':
-        return  render(request,'details.html')
+def addcart(request):
+    # 获取token  >> user
+    token = request.session.get('token')
+
+    # 获取商品id
+    goodsid = request.GET.get('goodsid')
+    print(goodsid)
+
+    data = {}
+
+    if token:   # 登录
+        # 获取用户
+        user = UserInfo.objects.get(db_token=token)
+        # 获取商品
+        goods = Good.objects.get(pk=goodsid)
+
+        # 1、 第一次添加的商品是不存在的，要往数据库中添加一条新记录
+        # 2、 商品已存在，即修改商品数量
+
+        # 判断需要添加的商品是否存在
+        carts = Cart.objects.filter(user=user).filter(goods=goods)
+        if carts.exists():  # 存在
+            cart = carts.first()
+            cart.number = cart.number + 1
+            cart.save()
+        else:   # 不存在
+            cart = Cart()
+            cart.user = user
+            cart.goods = goods
+            cart.number = 1
+            cart.save()
+
+        return JsonResponse({'msg':'{},添加购物车成功'.format(goods.productlongname), 'number':cart.number, 'status': 1})
+
+    else:   # 没登录
+        # ajax操作中，不能重定向
+        # ajax异步请求操作，数据的传输
+        # 即ajax请求，如果想页面跳转(服务器重定向不了)，客户端处理
+        # return redirect('axf:login')
+        data['msg'] = '请登录后操作!'
+        data['status'] = -1
+        return JsonResponse(data)
+
+
+
+
+
+
+
+
+def details(request,num):
+    token = request.session.get('token')
+    user = UserInfo.objects.filter(db_token=token).first()
+    good=Good.objects.all()[int(num)-1]
+
+    return render(request,'details.html',context={'good':good,'user':user})
+
+

@@ -56,6 +56,7 @@ $(function () {
             $(".price").html(obj.price);
             $(".unit").html(obj.unit);
         }
+
         //获取id
         function getParams(str, name) {
             var arr = str.split("&");
@@ -190,7 +191,60 @@ $(function () {
 		
 		
 	}
-	
 
+ // 假如商品个数不为0，显示
+
+        var num = parseInt( $('.addminus .num').html() )
+	console.log(num)
+        if (num) {  // 显示
+            $('.addminus .mtp').show()
+            $('.addminus .num').show()
+        } else {    // 隐藏
+            $('.addminus .mtp').hide()
+            $('.addminus .num').hide()
+        }
+
+
+
+
+
+
+
+
+
+ // 加操作
+    $('.f-add-2 .addgds').click(function () {
+        // $(this)  >> 对应的加按钮
+        var goodsid = $(this).attr('goodsid')
+        // console.log($(this))
+
+        // 保存起来
+        var $that = $(this)
+
+        // 发起ajax请求
+        // jQuery.get( url [, data ] [, success(data, textStatus, jqXHR) ] [, dataType ] )
+        $.get('/addcart/', {'goodsid':goodsid}, function (response) {
+            console.log(response)
+            if (response.status == -1){     // 未登录，直接跳转到登录
+                // DOM  BOM
+                window.open('/login/', target='_self')
+            } else if(response.status == 1){    // 添加成功
+                // 有问题!!!!
+                // $('.bt-wrapper .num').show().html(response.number)
+                // $('.bt-wrapper .glyphicon-minus').show()
+
+                // 兄弟节点
+                // 问题: 操作不了
+                // 分析: prev()上一个兄弟节点【没问题】， 问题只能是 $(this)
+                // console.log($(this))
+                // $(this) 指向有问题， 因为是由ajax触发的，所以这里指向ajax
+                // $(this).prev().show().html(response.number)
+                // $(this).prev().prev().show()
+
+                   	$that.show()
+            		$that.show()
+            }
+        })
+    })
 
 });

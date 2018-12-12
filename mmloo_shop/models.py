@@ -20,7 +20,7 @@ class UserInfo(models.Model):
     def __str__(self):
         return '用户电话:{}-创建时间:{}-最后修改时间:{}'.format(self.db_utel,self.db_uFirstTime,self.db_uLastTime)
     class Meta:
-        db_table = 'mml_userinfos'
+        db_table = 'mmloo_userinfos'
 
 
 
@@ -37,19 +37,26 @@ class Lunbo(models.Model):
             self.db_img_detail,self.db_img_firsttime,
             self.db_img_lasttime,self.db_img)
     class Meta:
-        db_table = 'mml_lunbos'
+        db_table = 'mmloo_lunbos'
 
 
 class Good(models.Model):
-    good_img = models.CharField(max_length=100)
+    good_img = models.ImageField(max_length=255,upload_to='uploadfiles/detailimg')
+
+
+    picture1 = models.ImageField(max_length=255,upload_to='uploadfiles/detailimg')
+    picture2 = models.ImageField(max_length=255, upload_to='uploadfiles/detailimg')
+    picture3 = models.ImageField(max_length=255, upload_to='uploadfiles/detailimg')
+    picture4 = models.ImageField(max_length=255, upload_to='uploadfiles/detailimg')
+
     good_detail = models.CharField(max_length=100)
     good_price = models.DecimalField(max_digits=10,decimal_places=2)
     market_price = models.DecimalField(max_digits=10, decimal_places=2)
-    trackid = models.CharField(max_length=20)
+    goodid = models.IntegerField(max_length=10,default=1)
     def __str__(self):
-        return self.good_img
+        return self.good_detail
     class Meta:
-        db_table = 'mml_goods'
+        db_table = 'mmloo_goods'
 
 
 
@@ -70,31 +77,38 @@ class Good(models.Model):
 # class Detail(models.Model):
 #     num = models.CharField(max_length=20)
 #     name = models.CharField(max_length=255)
-#     price = models.CharField(max_length=50)
-#     mbbprice = models.CharField(max_length=50)
-#     unit = models.CharField(max_length=20)
-#     heading = models.CharField(max_length=255)
+#     detail = models.CharField(max_length=255)
+#     price = models.CharField(max_length=20)
+#     mmlprice = models.CharField(max_length=20)
+#     # comment = models.CharField(max_length=50)
+#     # place = models.CharField(max_length=255)
+#
+#     headimg = models.CharField(max_length=255)
 #     picnum=models.CharField(max_length=255)
-#     pic1 = models.CharField(max_length=255)
-#     pic2 = models.CharField(max_length=255)
-#     pic3 = models.CharField(max_length=255)
-#     pic4 = models.CharField(max_length=255)
-#     pic5 = models.CharField(max_length=255)
-#     pic6 = models.CharField(max_length=255)
+#     picture1 = models.CharField(max_length=255)
+#     picture2 = models.CharField(max_length=255)
+#     picture3 = models.CharField(max_length=255)
+#     picture4 = models.CharField(max_length=255)
 #
 #     def __str__(self):
 #         return self.name
-#
+
 # class Text(models.Model):
 #     str=HTMLField()
 #
 #
-# class Cart(models.Model):
-#     user=models.ForeignKey(User)
-#     good = models.ForeignKey(Detail)
-#     num = models.IntegerField()
-#     isselect = models.BooleanField(default=True)
-#
+class Cart(models.Model):
+    # 用户
+    user = models.ForeignKey(UserInfo)
+    # 商品
+    goods = models.ForeignKey(Good)
+    # 商品个数
+    number = models.IntegerField()
+    # 是否选中
+    isselect = models.BooleanField(default=True)
+
+    class Meta:
+        db_table = 'mmloo_carts'
 #
 # class Order(models.Model):
 #     user = models.ForeignKey(User)
@@ -108,3 +122,37 @@ class Good(models.Model):
 #     ordernum=models.ForeignKey(Order)
 #     good = models.ForeignKey(Detail)
 #     num = models.CharField(max_length=255)
+
+
+
+
+# 订单 模型类
+# 一个用户 对应 多个订单 【用户主表， 订单从表(声明关系)】
+class Order(models.Model):
+    # 用户
+    user = models.ForeignKey(UserInfo)
+    # 创建时间
+    createtime = models.DateTimeField(auto_now_add=True)
+    # 状态
+    # -1 过期
+    # 0 未付款
+    # 1 已付款，未发货
+    # 2 已付款，已发货， 【快递】
+    # 3 已签收，未评价
+    # 4 已评价
+    status = models.IntegerField(default=0)
+    # 订单号
+    identifier= models.CharField(max_length=256)
+
+
+# 订单商品 模型类
+# 一个订单 对应 多个商品 【订单主表，订单商品从表(声明关系)】
+class OrderGoods(models.Model):
+    # 订单
+    order = models.ForeignKey(Order)
+    # 商品
+    goods = models.ForeignKey(Good)
+    # 个数
+    number = models.IntegerField()  # 1
+    # 大小    # XL
+    # 颜色    # 白色
