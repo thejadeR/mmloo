@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>订单列表</title>
+</head>
+<body>
+            <p>
+                <a href="{% url 'mmloo_shop:orderdetail' order.identifier %}">
+                    {{ forloop.counter }}、{{ order.identifier }}
+                    <span style="color: white; background: red">
+                    {% if order.status == 0 %}
+                        未付款
+                    {% elif order.status == 1 %}
+                        已付款(未发货)
+                    {% elif order.status == 2 %}
+                        已签收
+                    {% endif %}
+                </span>
+                </a>
+            </p>
+</body>
+</html>

@@ -2,13 +2,17 @@
 .flag{
 	background: #f90!important;
 }
+
+
+/*头部*/
 .g-t {
     width: 100%;
     height: 35px;
     background: #f5f5f5;
 }
 .m-t-main {
-    width: 990px;
+    width: 1100px;
+    height: 35px;
     margin: 0 auto;
 }
 
@@ -68,6 +72,7 @@
 /* 右 */
 .t-u-rgt {
     float: right;
+    height: 35px;
 }
 .t-u-rgt li {
     padding: 0 8px;
@@ -108,6 +113,8 @@ em.cart, em.collect, em.menu {
 .t-u-rgt li:nth-child(4) {
     /* margin-right: 19px; */
 }
+
+
 
 /* header */
 .g-h {
@@ -341,36 +348,89 @@ label {
     margin: 0 22px 0 9px;
 }
 
-/* body-content-商品主体 */
-.cnt-m {
-    margin-bottom: 17px;
+
+
+ /*!*body-content-商品主体 *!*/
+/*.cnt-m {*/
+    /*margin-bottom: 17px;*/
+/*}*/
+
+
+
+/*.cnt-m-h {*/
+    /*height: 36px;*/
+    /*line-height: 36px;*/
+/*}*/
+/*.cnt-m-h label {*/
+    /*float: left;*/
+    /*position: relative;*/
+    /*top: 13px;*/
+    /*display: inline-block;*/
+    /*width: 11px;*/
+    /*height: 11px;*/
+    /*border: 1px solid #c5c5c5;*/
+    /*margin: 0 9px 0 15px;*/
+/*}*/
+/*.cnt-m-h p {*/
+    /*float: left;*/
+    /*color: #3c3c3c;*/
+/*}*/
+/*.cnt-m-h span {*/
+    /*color: #000000;*/
+/*}*/
+/*.cnt-m-h img {*/
+    /*position: relative;*/
+    /*top: 3px;*/
+    /*margin-left: 12px;*/
+/*}*/
+.cnt-h  .cnt-m-lft  li:nth-of-type(2)
+{
+    width: 350px;
 }
-.cnt-m-h {
-    height: 36px;
-    line-height: 36px;
+.cnt-h  .cnt-m-lft  li:nth-of-type(3)
+{
+    width: 80px;
 }
-.cnt-m-h label {
-    float: left;
-    position: relative;
-    top: 13px;
-    display: inline-block;
-    width: 11px;
-    height: 11px;
-    border: 1px solid #c5c5c5;
-    margin: 0 9px 0 15px;
+
+.cnt-h  .cnt-m-lft  li:nth-of-type(4)
+{
+    width: 80px;
 }
-.cnt-m-h p {
-    float: left;
-    color: #3c3c3c;
+.cnt-h  .cnt-m-lft  li:nth-of-type(5)
+{
+    width: 80px;
 }
-.cnt-m-h span {
-    color: #000000;
+
+.cnt-h  .cnt-m-lft  li:nth-of-type(6)
+{
+    width: 80px;
 }
-.cnt-m-h img {
-    position: relative;
-    top: 3px;
-    margin-left: 12px;
+
+
+/*勾选框*/
+.cnt-h .allSelect,.select
+{
+    background-color: #f90;
 }
+.cnt-h .no
+{
+    background-color: #fff;
+}
+
+
+.m-gds-f .gd-pay-lft .all .allSelect
+{
+    background-color: #f90;
+}
+.m-gds-f .gd-pay-lft  .all .no
+{
+    background-color: #fff;
+}
+
+
+
+
+
 
 /* goods-左 */
 .cnt-m-gds {
@@ -697,13 +757,13 @@ label {
 {
     text-align: center;
     position: absolute;
-    top: 180px;
+    top: 200px;
     left: 236px;
 }
 
 .cnt-h li
 {
-    margin-right: 100px;
+    /*margin-right: 100px;*/
 }
 
 

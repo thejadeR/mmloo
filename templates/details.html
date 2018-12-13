@@ -17,21 +17,26 @@
         <div class="g-t-layout">
             <div class="m-top">
                 <div class="m-t-lft">
-                    <a href="login.html">登录</a>
-                    <a href="register.html">注册</a>
+                    <a href="{% url 'mmloo_shop:login' %}">{{ user.db_utel | default:'登陆' }}</a>
+                    <a href="{% url 'mmloo_shop:register' %}">注册</a>
+                     {% if user.db_utel %}
+                        <a href="{% url 'mmloo_shop:logout' %}">退出登陆</a>
+                    {% endif %}
                 </div>
                 <div class="m-t-rgt">
                     <ul>
                         <li>
-                            <i class="iconfont icn-car">&#xe607;</i><a href="#">购物车<span>0</span>件</a><i class="iconfont">&#xe600;</i>
+                            <i class="iconfont icn-car">&#xe607;</i><a href="#">购物车<span>{{ allnum | default:0 }}</span>件</a><i class="iconfont">&#xe600;</i>
                             <div class="shopcar">
                                 <h1>最新加入的商品</h1>
                                 <div class="myitems">
-                                    <span><img src="/static/images1/loading.gif" alt=""></span>
+                                    {% for cart in carts %}
+                                    <p>{{ cart.goods.good_detail }}</p>
+                                    {% endfor %}
                                 </div>
                                 <div class="checkout">
-                                    <p>共<span class="num">0</span>种商品</p>
-                                    <a href="tb-cart.html" target="_blank">结算购物车中的商品</a>
+                                    <p>共<span class="num">{{ typenum | default:0 }}</span>种商品</p>
+                                    <a href="{% url 'mmloo_shop:tb-cart' %}" target="_blank">结算购物车中的商品</a>
                                 </div>
                             </div>
                         </li>
@@ -79,7 +84,7 @@
                 </div>
             </div>
         </div>
-        <h1><a href="#"><img src="/static/details-images/banner.jpg" alt="米米乐商城"></a></h1>
+        <h1><a href="{% url 'mmloo_shop:index' %}"><img src="/static/details-images/banner.jpg" alt="米米乐商城"></a></h1>
     </div>
     <!-- header -->
     <div class="g-h-wrap">
@@ -116,7 +121,7 @@
                         <!-- <ul>二级菜单放这</ul> -->
                     </li>
                     <li>
-                        <a href="index.html" target="_blank">首页</a>
+                        <a href="{% url 'mmloo_shop:index' %}" target="_blank">首页</a>
                     </li>
                     <li>
                         <a href="#">米活动</a>
@@ -176,7 +181,7 @@
         <div class="m-gds-top">
             <div>
                 <div class="gds-t-lft">
-                    <p> 首页 > 手机数码 > 手机通讯 > IPhone > 苹果（APPLE）iPhone 6s 32G 公开版 玫瑰金</p>
+                    <p> 首页 > {{ good.good_fffarther }} > {{ good.good_ffarther }} > {{ good.good_farther }} > {{ good.good_detail }}</p>
                 </div>
                 <div class="gds-t-rgt">
                     <p>
@@ -188,8 +193,12 @@
                 </div>
             </div>
             <div class="gds-btm">
-                <p class="name">苹果（APPLE）iPhone 6s 32G 公开版 玫瑰金</p>
-                <span>至大之作，至薄之作，不仅大，更加大放异彩，大有动力，大有能效，改变摄像，有颠覆摄像，全凭指尖~</span>
+                <p class="name">{{ good.good_detail }}</p>
+{#                {% if good.goodid == 1 %}#}
+                     <span>{{ good.good_explain }}</span>
+{#                {% else %}#}
+{#                    <span>详情暂无</span>#}
+{#                {% endif %}#}
             </div>
         </div>
 
@@ -198,19 +207,19 @@
             <div class="u-gds-lft">
                 <!-- 小图区域 -->
                 <div class="u-gdsbox">
-                    <img src="/static/details-images/jin1.png" alt="" class="myImgs">
+                    <img src="/static/{{ good.good_img }}" alt="" class="myImgs">
                     <div id="u-floatbox"></div>
                 </div>
                 <!-- 显示大图区域 -->
                 <div id="showImg">
-                    <img src="/static/details-images/jin1.png" alt="" class="myImgs">
+                    <img src="/static/{{ good.good_img }}" alt="" class="myImgs">
                 </div>
                 <!-- 显示大图区域end -->
                 <ul id="u-mingds">
-                    <li><img src="/static/details-images/jin1.png" alt="" class="myImgs"></li>
-                    <li><img src="/static/details-images/jin2.jpg" alt="" class="myImgs"></li>
-                    <li><img src="/static/details-images/samgsun.jpg" alt="" class="myImgs"></li>
-                    <li><img src="/static/details-images/huawei.jpg" alt="" class="myImgs"></li>
+                    <li><img src="/static/{{ good.picture1 }}" alt="" class="myImgs"></li>
+                    <li><img src="/static/{{ good.picture2 }}" alt="" class="myImgs"></li>
+                    <li><img src="/static/{{ good.picture3 }}" alt="" class="myImgs"></li>
+                    <li><img src="/static/{{ good.picture4 }}" alt="" class="myImgs"></li>
                 </ul>
                 <div class="f-gds">
                     <a href=""><img src="/static/details-images/fapiao.png" alt="">开具增票</a>
@@ -220,21 +229,23 @@
             </div>
             <div class="u-gds-m">
                 <div class="f-buy">
-                    <label>零 售 价：</label><p class="price p-color"> ¥4599.00</p><br>
-                    <label>批 发 价：</label><p><span>¥4299.00</span> 一个也批发，单单返钱花</p><br>
-                    <label>商品评价：</label><p><i class="star"></i>(60条评论)</p><br>
-                    <label>至全国：  </label><p>运费：	10.00元 ，满49元包邮 由 <em>官方店铺</em> 发货</p>
+                    <label>零 售 价：</label><p class="price p-color"> ¥{{ good.market_price }}</p><br>
+                    <label>批 发 价：</label><p><span>¥{{ good.good_price }}</span> 一个也批发，单单返钱花</p><br>
+                    <label>商品评价：</label><p><i class="star"></i>({{ good.good_comment }}条评论)</p><br>
+                    <label>至全国：  </label><p>运费：	{{ good.good_freight }}元 ，满49元包邮 由 <em>官方店铺</em> 发货</p>
                 </div>
                 <div>
                     <div class="f-add-1">
                         <div class="addminus">
-                            <label>购买数量：</label><span class="num">0</span>
+                            <label>购买数量：</label><span class="num">1</span>
                             <input class="add" type="button" value="+">
                             <input class="mtp" type="button" value="-"><br>
                         </div>
                         <div class="f-add-2">
                             <input class="buygds" type="button" value="立即购买">
-                            <input class="addgds" type="button" value="添加购物车"><br>
+                            <input class="addgds" type="button" value="添加购物车" goodsid="{{ good.goodid }}">
+                            <span class="msg"></span>
+                            <br>
                         </div>
 
 

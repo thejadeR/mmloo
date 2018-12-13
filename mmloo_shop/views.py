@@ -8,7 +8,7 @@ from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 
 # Create your views here.
-from mmloo_shop.models import UserInfo, Lunbo, Good, Cart
+from mmloo_shop.models import UserInfo, Lunbo, Good, Cart, Order, OrderGoods
 from mysite14 import settings
 
 
@@ -25,22 +25,18 @@ def index(request):
 
     if token:
         user = UserInfo.objects.get(db_token=token)
+        carts = Cart.objects.filter(user=user)
+        if carts.exists():
+            data['carts'] = carts
+            data['typenum'] = carts.count()
+        allnum = 0
+        for cart in carts:
+            allnum += cart.number
         data['uesr'] = user
         data['utel'] = user.db_utel
         data['headimg'] = user.db_headimg
-
-    # data = {
-    #
-    #
-    #     # 'navs': navs,
-    #     # 'mustbuys': mustbuys,
-    #     # 'shophead': shophead,
-    #     # 'shoptabs': shoptabs,
-    #     # 'shopclass': shopclass,
-    #     # 'shopcommends': shopcommends,
-    #     # 'mainShows': mainShows
-    # }
-
+        data['allnum'] = allnum
+        print(allnum)
 
     return render(request, 'index.html', context=data)
 
@@ -56,6 +52,26 @@ def generate_psword(password):
     mymd5 = hashlib.md5()
     mymd5.update(password.encode('utf-8'))
     return mymd5.hexdigest()
+
+
+def mine(request):
+    token = request.session.get('token')
+
+    data = {}
+
+    if token:
+        user = UserInfo.objects.get(db_token=token)
+        data['name'] = user.db_utel
+        data['img'] = user.db_headimg
+
+        # 未付款、已付款...
+        orders = Order.objects.filter(user=user)
+        data['waitpay'] = orders.filter(status=0).count()
+        data['paydone'] = orders.filter(status=1).count()
+
+    return render(request, 'mine.html', context=data)
+
+
 
 
 def login(request):
@@ -146,13 +162,31 @@ def cart(request):
     token = request.session.get('token')
     if token:
         user = UserInfo.objects.get(db_token=token)
-        carts = Cart.objects.filter(user=user).exclude(number=0)
+        carts = Cart.objects.filter(user=user)
         return render(request, 'tb-cart.html',context={
             'user':user,
             'carts': carts
         })
     else:
         return redirect('mmloo_shop:login')
+
+def subcart(request):
+    token = request.session.get('token')
+    goodsid = request.GET.get('goodsid')
+
+    user = UserInfo.objects.get(db_token=token)
+    goods = Good.objects.get(goodid=goodsid)
+
+    # 找到对应的购物车该商品信息
+    cart = Cart.objects.filter(user=user).filter(goods=goods).first()
+    # 删除该商品
+    cart.delete()
+    data = {
+        'msg': '该商品删除成功',
+        'status': 1,
+    }
+
+    return JsonResponse(data)
 
 
 def addcart(request):
@@ -161,7 +195,9 @@ def addcart(request):
 
     # 获取商品id
     goodsid = request.GET.get('goodsid')
+    numbers = request.GET.get('numbers')
     print(goodsid)
+    print(numbers)
 
     data = {}
 
@@ -169,7 +205,7 @@ def addcart(request):
         # 获取用户
         user = UserInfo.objects.get(db_token=token)
         # 获取商品
-        goods = Good.objects.get(pk=goodsid)
+        goods = Good.objects.get(goodid=goodsid)
 
         # 1、 第一次添加的商品是不存在的，要往数据库中添加一条新记录
         # 2、 商品已存在，即修改商品数量
@@ -178,16 +214,16 @@ def addcart(request):
         carts = Cart.objects.filter(user=user).filter(goods=goods)
         if carts.exists():  # 存在
             cart = carts.first()
-            cart.number = cart.number + 1
+            cart.number = cart.number + int(numbers)
             cart.save()
         else:   # 不存在
             cart = Cart()
             cart.user = user
             cart.goods = goods
-            cart.number = 1
+            cart.number = int(numbers)
             cart.save()
 
-        return JsonResponse({'msg':'{},添加购物车成功'.format(goods.productlongname), 'number':cart.number, 'status': 1})
+        return JsonResponse({'msg':'{},添加购物车成功'.format(goods.good_detail), 'number':cart.number, 'status': 1})
 
     else:   # 没登录
         # ajax操作中，不能重定向
@@ -200,16 +236,155 @@ def addcart(request):
 
 
 
-
-
-
-
-
 def details(request,num):
+    data = {}
+    good = Good.objects.get(goodid=int(num))
+    data['good'] = good
     token = request.session.get('token')
-    user = UserInfo.objects.filter(db_token=token).first()
-    good=Good.objects.all()[int(num)-1]
+    if token:
+        user = UserInfo.objects.get(db_token=token)
+        data['user'] = user
+        carts = Cart.objects.filter(user=user)
+        if carts.exists():
+            data['carts'] = carts
+            data['typenum'] = carts.count()
+            allnum = 0
+            for cart in carts:
+                allnum += cart.number
+            data['allnum'] = allnum
 
-    return render(request,'details.html',context={'good':good,'user':user})
+        return render(request, 'details.html', context=data)
 
+    return render(request,'details.html',context={'good':good})
+
+
+
+def changecartstatus(request):
+    cartid = request.GET.get('cartid')
+
+    cart = Cart.objects.get(pk=cartid)
+    cart.isselect = not cart.isselect   # 取反
+    cart.save()
+
+    data = {
+        'msg': '修改状态成功',
+        'status': 1,
+        'isselect': cart.isselect
+    }
+
+    return JsonResponse(data)
+
+
+def changecartisall(request):
+    token = request.session.get('token')
+    user = UserInfo.objects.get(db_token=token)
+    carts = Cart.objects.filter(user=user)
+
+    # 全选/取消全选
+    isall = request.GET.get('isall')
+    if isall == 'true':
+        isall = True
+    else:
+        isall = False
+
+    for cart in carts:
+        cart.isselect = isall
+        cart.save()
+
+
+    data = {
+        'msg': '全选/取消全选',
+        'status': 1
+    }
+
+    return JsonResponse(data)
+
+
+def generate_identifier():
+    temp = str(random.randrange(1000,10000)) + str(int(time.time())) + str(random.randrange(1000,10000))
+    return temp
+
+
+def generateorder(request):
+
+    token = request.session.get('token')
+    user = UserInfo.objects.get(db_token=token)
+
+    # 生成订单
+    order = Order()
+    order.user = user
+    order.identifier = generate_identifier()
+    order.save()
+
+    # 订单商品 【选中的商品，即isselect】
+    carts = Cart.objects.filter(user=user).filter(isselect=True)
+    for cart in carts:
+        orderGoods = OrderGoods()
+        orderGoods.order = order
+        orderGoods.goods = cart.goods
+        orderGoods.number = cart.number
+        orderGoods.save()
+
+        # 从购物车中移除
+        cart.delete()
+
+    data = {
+        'msg': '下单成功',
+        'status': 1,
+        'identifier': order.identifier
+    }
+
+    return JsonResponse(data)
+
+
+def orderdetail(request,identifier):
+    # identifier = request.GET.get('identifier')
+
+    # 找到对应的订单信息
+    order = Order.objects.get(identifier=identifier)
+
+    return render(request, 'orderdetail.html', context={'order':order})
+
+
+# stu : 订单状态 【显示】
+def orderlist(request, stu):
+    # 订单列表 【未付款、已付款....】
+
+    token = request.session.get('token')
+    user = UserInfo.objects.filter(db_token=token)
+
+    orders = Order.objects.filter(user=user).filter(status=stu)
+
+    return render(request, 'orderlist.html', context={'orders':orders})
+
+
+def appnotify(request):
+
+    body_str = request.body.decode('utf-8')
+
+    # out_trade_no =
+    # 获取对应的订单，修改状态
+
+    return JsonResponse({'msg':'success'})
+
+
+def returenview(request):
+    return redirect('axf:orderdetail',0)
+
+
+def pay(request):
+    identifier = request.GET.get('identifier')
+
+    # 支付地址
+    url = alipay.direct_pay(
+        subject='iPhone X[土豪金，64G]', # 订单标题
+        out_trade_no=identifier,    # 订单号[axf]
+        total_amount=9.9,   # 支付金额
+        return_url='http://112.74.55.3/axf/returenview/'
+    )
+
+    # 拼接支付网关
+    alipay_url = 'https://openapi.alipaydev.com/gateway.do?{data}'.format(data=url)
+
+    return JsonResponse({'alipay_url':alipay_url, 'status':1})
 

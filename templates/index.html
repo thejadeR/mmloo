@@ -47,17 +47,19 @@
         <div class="menu-right">
             <div class="user-entry">
                 <a class="shop" href="javascript:;" target="_blank">
-                    <em class="bignum">0</em>
-                    <i class="iconfont iconshop">&#xe607;</i>购物车<span class="num">0</span>件
+                    <em class="bignum">{{ allnum | default:0 }}</em>
+                    <i class="iconfont iconshop">&#xe607;</i>购物车<span class="num">{{ allnum | default:0 }}</span>件
                 </a>
                 <i class="iconfont iconarrow">&#xe600;</i>
                 <div class="shopcar">
                     <h1>最新加入的商品</h1>
                     <div class="myitems">
-                        <span><img src="/static/images1/loading.gif" alt=""></span>
+                        {% for cart in carts %}
+                            <p>{{ cart.goods.good_detail }}</p>
+                        {% endfor %}
                     </div>
                     <div class="checkout">
-                        <p>共<span class="num">0</span>种商品</p>
+                        <p>共<span class="num">{{ typenum  | default:0 }}</span>种商品</p>
                         <a href="{% url 'mmloo_shop:tb-cart' %}" target="_blank">结算购物车中的商品</a>
                     </div>
                 </div>
@@ -68,7 +70,7 @@
                 </dt>
                 <dd class="userzone">
                     <ul>
-                        <li><a href="javascript:;">商品收藏</a></li>
+                        <li><a href="{% url 'mmloo_shop:mine' %}">我的信息</a></li>
                         <li><a href="javascript:;">店铺收藏</a></li>
                         <li><a href="javascript:;">收藏米米乐</a></li>
                     </ul>
@@ -963,7 +965,7 @@
                 <div class="greet">
                     {% if uesr.db_utel %}
                         <h2 class="person">
-                            <a href=" {% url 'mmloo_shop:uploadheadimg' %} ">
+                            <a href=" {% url 'mmloo_shop:mine' %} ">
                                 <img src="/static/uploadfiles/headimg/{{ headimg }}" alt="头像">
                             </a>
                         </h2>

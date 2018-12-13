@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>订单详情</title>
+    <link rel="stylesheet" href="/static/css/orderdetail.css">
+    <link rel="stylesheet" href="/static/css/bootstrap.css">
+    <script src="/static/js/jquery-3.2.1.js"></script>
+    <script src="/static/js/jquery.cookie.js"></script>
+    <script src="/static/js/orderdetail.js"></script>
+</head>
+<body>
+
+ <div class="orderdetail">
+        <div class="back">
+            <a href="{% url 'mmloo_shop:mine' %}">
+                <span>返回我的</span>
+            </a>
+        </div>
+
+        <p class="identifier">
+            订单号: {{ order.identifier }}
+        </p>
+
+        <ul>
+            {% for ordergoods in order.ordergoods_set.all %}
+            <li>
+                <div class="content-wrapper">
+                    <div class="img">
+                        <img src="/static/{{ ordergoods.goods.good_img }}" alt="">
+                    </div>
+                    <div class="detail">
+                        <p class="name">{{ ordergoods.goods.good_detail }}</p>
+                        <p class="price">￥{{ ordergoods.goods.good_price }}</p>
+                        <p class="num">x{{ ordergoods.number }}</p>
+                    </div>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+
+        <div class="bill">
+            {% if order.status == 0 %}
+                <div class="bill-right" id="pay" identifier="{{ order.identifier }}">付款</div>
+            {% endif %}
+        </div>
+
+    </div>
+
+
+</body>
+</html>

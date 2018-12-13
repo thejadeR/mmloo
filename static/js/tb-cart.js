@@ -1,4 +1,4 @@
-$(function() {
+$(function () {
     // bottomline-move
     function lineMove() {
         var ul = $(".h-m-lft");
@@ -10,269 +10,297 @@ $(function() {
         });
         $(".h-m-lft").mouseleave(function() {
         	line.animate({"left": 0}, 120);
-        	
+
         });
     }
     lineMove();
-    
-    
-	//购物车
-    //添加商品（商品保存在cookie中）
-    refresh();//刷新
-    function refresh() {
-    	//默认清除原节点
-    	$(".cnt-m").find(".cnt-m-gds").remove();
-    	
-    	//获取cookie中的商品数据
-        var arr = $.cookie("cart"); 
-        if(arr) {
-            arr = JSON.parse(arr);
-            var sum =0
-			//总价
-            var totalPrice = 0.00;
-            for(var i=0; i<arr.length; i++) {
-                var obj = arr[i];
-				
-				var newdiv = $(".cnt-m-gds").eq(0).clone(true).css("display","block")
-                			.appendTo(".cnt-m");
-                //修改list1
-                newdiv.find(".img").attr("src",obj.headImg)	
-                newdiv.find(".list1 li").eq(1).children(0).html(obj.name);
-                newdiv.find(".gds-num").val(obj.num)
-                //修改list2
-                newdiv.find(".list2 li p").html(obj.name);
-                newdiv.find(".list2 li span").html(obj.price);
-                //修改list3 
-                newdiv.find(".list3 li span").html(obj.price * obj.num);
-                
-                //商品数量
-//              $(".gds-pay-rgt").find("#choNum").html(obj.num);
-                
-                //默认选中
-               	if(obj.flag) {
-        			newdiv.find(".select").css({"background": "#f90"});
-        		} 
-        		else {
-        			newdiv.find(".select").css({"background": "#fff"});
-        		}
-            		
-				//显示总价
-				if(obj.flag) {
-                	sum += obj.price * obj.num;
-                    $(".cost").html(sum);
-            	} 
-                else {
-                    $(".cost").html(sum);
-               	}
-                
-            }
-        //没有商品
-        } 
-        else {
-            console.log("购物车还没有商品，请先添加！");
-        }
-    }
-   
-   //选中某个商品
-	var arr = JSON.parse($.cookie("cart")); 
-	var index = 0;
-	//商品数量
-	var num = 0;
-   	$(".cnt-m").on("click", ".select", function() {
-   		//console.log($(this))
-		var index = $(this).index(".cnt-m .list1 li .select");
-		//console.log(index,arr[index].flag,arr)
-		if(!arr[index].flag) {
-			$(this).css({"background": "#f90"});
-			arr[index].flag = true;
-			$.cookie("cart", JSON.stringify(arr), {expires:30, path:"/"});
-			 console.log($.cookie("cart"));
-		} 
-		else {
-			console.log($.cookie("cart"));
-			$(this).css({"background": "#fff"});
-			console.log(index)
-			arr[index].flag = false;
-			$.cookie("cart", JSON.stringify(arr), {expires:30, path:"/"});
-			console.log($.cookie("cart"));
-		}
 
-		//选中某个商品改变商品的数量
-		if(arr[index].flag == true) {
-			$(".gds-pay-rgt").find("#choNum").html(++num);
-		} 
-		if(arr[index].flag == false) {
-			$(".gds-pay-rgt").find("#choNum").html(--num);
-		}
-		
-		
-		//调用
+
+    //购物车
+    //添加商品（商品保存在cookie中）
+//     refresh();//刷新
+//     function refresh() {
+//         //默认清除原节点
+//         $(".cnt-m").find(".cnt-m-gds").remove();
+//
+//         //获取cookie中的商品数据
+//         var arr = $.cookie("cart");
+//         if (arr) {
+//             arr = JSON.parse(arr);
+//             var sum = 0
+//             //总价
+//             var totalPrice = 0.00;
+//             for (var i = 0; i < arr.length; i++) {
+//                 var obj = arr[i];
+//
+//                 var newdiv = $(".cnt-m-gds").eq(0).clone(true).css("display", "block")
+//                     .appendTo(".cnt-m");
+//                 //修改list1
+//                 newdiv.find(".img").attr("src", obj.headImg)
+//                 newdiv.find(".list1 li").eq(1).children(0).html(obj.name);
+//                 newdiv.find(".gds-num").val(obj.num)
+//                 //修改list2
+//                 newdiv.find(".list2 li p").html(obj.name);
+//                 newdiv.find(".list2 li span").html(obj.price);
+//                 //修改list3
+//                 newdiv.find(".list3 li span").html(obj.price * obj.num);
+//
+//                 //商品数量
+// //              $(".gds-pay-rgt").find("#choNum").html(obj.num);
+//
+//                 //默认选中
+//                 if (obj.flag) {
+//                     newdiv.find(".select").css({"background": "#f90"});
+//                 }
+//                 else {
+//                     newdiv.find(".select").css({"background": "#fff"});
+//                 }
+//
+//                 //显示总价
+//                 if (obj.flag) {
+//                     sum += obj.price * obj.num;
+//                     $(".cost").html(sum);
+//                 }
+//                 else {
+//                     $(".cost").html(sum);
+//                 }
+//
+//             }
+//             //没有商品
+//         }
+//         else {
+//             console.log("购物车还没有商品，请先添加！");
+//         }
+//     }
+
+    //选中某个商品
+    var arr = JSON.parse($.cookie("cart"));
+    var index = 0;
+    //商品数量
+    var num = 0;
+    $(".cnt-m").on("click", ".select", function () {
+        //console.log($(this))
+        var index = $(this).index(".cnt-m .list1 li .select");
+        //console.log(index,arr[index].flag,arr)
+        if (!arr[index].flag) {
+            $(this).css({"background": "#f90"});
+            arr[index].flag = true;
+            $.cookie("cart", JSON.stringify(arr), {expires: 30, path: "/"});
+            console.log($.cookie("cart"));
+        }
+        else {
+            console.log($.cookie("cart"));
+            $(this).css({"background": "#fff"});
+            console.log(index)
+            arr[index].flag = false;
+            $.cookie("cart", JSON.stringify(arr), {expires: 30, path: "/"});
+            console.log($.cookie("cart"));
+        }
+
+        //选中某个商品改变商品的数量
+        if (arr[index].flag == true) {
+            $(".gds-pay-rgt").find("#choNum").html(++num);
+        }
+        if (arr[index].flag == false) {
+            $(".gds-pay-rgt").find("#choNum").html(--num);
+        }
+
+
+        //调用
         isAllSelect();
         accSelect();
         refresh();
-	});
-	
-	//刷新后显示的商品数量
-	for(var j=0; j<arr.length; j++) {
-    	//console.log(arr.length);
-    	if(arr[j].flag == true) {
-    		$(".gds-pay-rgt").find("#choNum").html(++num);
-    	}
-    }
-    
-   
-    //添加商品+
-    $(".list2 li").on("click", ".add", function() {
-    	console.log("我被点击了");
-    	var index = $(this).index(".list2 li .add");
-        //获取cookie
-		var arr = JSON.parse( $.cookie("cart") );
-		//在购物车页面和cookie中同步显示商品数量
-		$(".gds-num").eq(index).val(arr[index-1].num++);
-		
-		//覆盖原来的cookie
-		$.cookie("cart", JSON.stringify(arr), {expires:30, path:"/"});
-		//刷新节点数据
-		refresh();
-    
     });
-    
-    
-    //减少商品-
-    $(".list2 li").on("click", ".reduce", function() {
-    	//选中所点击商品的下标
-    	var index = $(this).index(".list2 li .reduce");
-    	var arr = JSON.parse($.cookie("cart"));
-    	//在购物车页面和cookie中同步显示商品数量
-    	$(this).find(".gds-num").html(arr[index-1].num--);
-    	if( (arr[index-1].num)<1 ) {
-    		arr[index-1].num = 1;
-    	}
-    	//覆盖原来的cookie
-		$.cookie("cart", JSON.stringify(arr), {expires:30, path:"/"});
-		refresh();
-    });
-   
-    //点击删除按钮
-    $(".list3 li").on("click", ".del", function() {
-    	var index = $(this).index(".list3 .del")-1;
-    	var arr = JSON.parse($.cookie("cart"));
-    	//删除当前商品
-    	arr.splice(index, 1); 
-    	//修改cookie中的数据
-    	$.cookie("cart", JSON.stringify(arr), {expires:30, path:"/"});
-    	isAllSelect();
-    	accSelect();
-    	refresh();
-    });
-	
-	//刷新后就判断是否全选
-	isAllSelect();
-    function isAllSelect(){
-		var arr = $.cookie("cart"); //购物车中有商品
-		//为undefined时 
-		if (!arr) {
-			return;
-		}
-		var arr = JSON.parse($.cookie("cart"));
-		//console.log(arr);
-		var sum = 0;
-		for (var i=0; i<arr.length; i++) {
-			sum += arr[i].flag;
-		}
-		//全选
-		if (arr.length!=0 && sum==arr.length) {
-			$(".allSelect").addClass("flag");
-		}
-		//未全选
-		else {
-			$(".allSelect").removeClass("flag");
-		}
-	}
-    
-    //点击全选
-	$(".g-cnt").find(".allSelect").click(function(){
-		var arr = $.cookie("cart");
-		if (!arr) {
-			return;
-		}
-		var arr = JSON.parse($.cookie("cart"));
-		//全选
-		if(!$(".allSelect").hasClass("flag")){
-			for (var i=0; i<arr.length; i++) {
-				arr[i].flag= true;
-			}	
-			$(".allSelect").addClass("flag");
-			$(".gds-pay-rgt").find("#choNum").html(arr.length);
-		}
-		//全不选
-		else {
-			$(".allSelect").removeClass("flag")
-			for (var i=0; i<arr.length; i++) {
-				arr[i].flag= false;
-			}
-		}
-		
-		$.cookie("cart", JSON.stringify(arr), {expires:30, path:"/"});
-		//刷新
-		console.log($.cookie("cart"))
-		accSelect();
-		refresh();
-	});
-	
-	//删除所选中的商品
-	$("#delSelect").click(function(){
-		//确认是否删除商品
-		var status = confirm("是否要删除选中的商品？");
-		//获取cookie
-		var arr = JSON.parse($.cookie("cart"));
-		
-		//将未选中的商品添加到新数组newArr中，再将newArr保存到cookie
-		if (status) {
-			var newArr = [];
-			for (var i=0; i<arr.length; i++) {
-				if (!arr[i].flag) {
-					newArr.push(arr[i]);
-				}
-			}
-			//覆盖原来的cookie
-			$.cookie("cart", JSON.stringify(newArr), {expires:30, path:"/"});
-		}
-		isAllSelect();
-		accSelect();
-		//刷新节点数据
-		refresh();
-	});
-	
-	//结算
-	accSelect();
-	function accSelect() {
-		//状态
-		var state = accState();
-		if( $(".allSelect").hasClass("flag") || state){
-			$(".account-bg").attr("class", "account-bg active");
-		}
-		else {
-			$(".account-bg").attr("class", "account-bg");
-			$(".cost").html(0.00);
-			$(".gds-pay-rgt").find("#choNum").html(0);
-		}
-		refresh();
-	}
-	
-	//结算状态
-	function accState() {
-		var arr = JSON.parse($.cookie("cart"));
-		for(var i=0; i<arr.length; i++) {
-			var obj = arr[i];
-			if (obj.flag == true) {
-				return true;
-			}
-		}
-	}
-           
 
-}
+    //刷新后显示的商品数量
+    for (var j = 0; j < arr.length; j++) {
+        //console.log(arr.length);
+        if (arr[j].flag == true) {
+            $(".gds-pay-rgt").find("#choNum").html(++num);
+        }
+    }
+
+
+    //添加商品+
+    $(".list2 li").on("click", ".add", function () {
+        console.log("我被点击了");
+        var index = $(this).index(".list2 li .add");
+        //获取cookie
+        var arr = JSON.parse($.cookie("cart"));
+        //在购物车页面和cookie中同步显示商品数量
+        $(".gds-num").eq(index).val(arr[index - 1].num++);
+
+        //覆盖原来的cookie
+        $.cookie("cart", JSON.stringify(arr), {expires: 30, path: "/"});
+        //刷新节点数据
+        refresh();
+
+    });
+
+
+    //减少商品-
+    $(".list2 li").on("click", ".reduce", function () {
+        //选中所点击商品的下标
+        var index = $(this).index(".list2 li .reduce");
+        var arr = JSON.parse($.cookie("cart"));
+        //在购物车页面和cookie中同步显示商品数量
+        $(this).find(".gds-num").html(arr[index - 1].num--);
+        if ((arr[index - 1].num) < 1) {
+            arr[index - 1].num = 1;
+        }
+        //覆盖原来的cookie
+        $.cookie("cart", JSON.stringify(arr), {expires: 30, path: "/"});
+        refresh();
+    });
+
+    //点击删除按钮
+    $(".list3 li").on("click", ".del", function () {
+        var index = $(this).index(".list3 .del") - 1;
+        var arr = JSON.parse($.cookie("cart"));
+        //删除当前商品
+        arr.splice(index, 1);
+        //修改cookie中的数据
+        $.cookie("cart", JSON.stringify(arr), {expires: 30, path: "/"});
+        isAllSelect();
+        accSelect();
+        refresh();
+    });
+
+    //刷新后就判断是否全选
+    isAllSelect();
+
+    function isAllSelect() {
+        var arr = $.cookie("cart"); //购物车中有商品
+        //为undefined时
+        if (!arr) {
+            return;
+        }
+        var arr = JSON.parse($.cookie("cart"));
+        //console.log(arr);
+        var sum = 0;
+        for (var i = 0; i < arr.length; i++) {
+            sum += arr[i].flag;
+        }
+        //全选
+        if (arr.length != 0 && sum == arr.length) {
+            $(".allSelect").addClass("flag");
+        }
+        //未全选
+        else {
+            $(".allSelect").removeClass("flag");
+        }
+    }
+
+    //点击全选
+    $(".g-cnt").find(".allSelect").click(function () {
+        var arr = $.cookie("cart");
+        if (!arr) {
+            return;
+        }
+        var arr = JSON.parse($.cookie("cart"));
+        //全选
+        if (!$(".allSelect").hasClass("flag")) {
+            for (var i = 0; i < arr.length; i++) {
+                arr[i].flag = true;
+            }
+            $(".allSelect").addClass("flag");
+            $(".gds-pay-rgt").find("#choNum").html(arr.length);
+        }
+        //全不选
+        else {
+            $(".allSelect").removeClass("flag")
+            for (var i = 0; i < arr.length; i++) {
+                arr[i].flag = false;
+            }
+        }
+
+        $.cookie("cart", JSON.stringify(arr), {expires: 30, path: "/"});
+        //刷新
+        console.log($.cookie("cart"))
+        accSelect();
+        refresh();
+    });
+
+    //删除所选中的商品
+    $("#delSelect").click(function () {
+        //确认是否删除商品
+        var status = confirm("是否要删除选中的商品？");
+        //获取cookie
+        var arr = JSON.parse($.cookie("cart"));
+
+        //将未选中的商品添加到新数组newArr中，再将newArr保存到cookie
+        if (status) {
+            var newArr = [];
+            for (var i = 0; i < arr.length; i++) {
+                if (!arr[i].flag) {
+                    newArr.push(arr[i]);
+                }
+            }
+            //覆盖原来的cookie
+            $.cookie("cart", JSON.stringify(newArr), {expires: 30, path: "/"});
+        }
+        isAllSelect();
+        accSelect();
+        //刷新节点数据
+        refresh();
+    });
+
+    //结算
+    accSelect();
+
+    function accSelect() {
+        //状态
+        var state = accState();
+        if ($(".allSelect").hasClass("flag") || state) {
+            $(".account-bg").attr("class", "account-bg active");
+        }
+        else {
+            $(".account-bg").attr("class", "account-bg");
+            $(".cost").html(0.00);
+            $(".gds-pay-rgt").find("#choNum").html(0);
+        }
+        refresh();
+    }
+
+    //结算状态
+    function accState() {
+        var arr = JSON.parse($.cookie("cart"));
+        for (var i = 0; i < arr.length; i++) {
+            var obj = arr[i];
+            if (obj.flag == true) {
+                return true;
+            }
+        }
+    }
+
+
+    // // 新加
+    // var flag11 = true
+    // $('.cnt-h .gds .select').click(function () {
+    //     if (flag11) {
+    //         console.log('true')
+    //         $(this).css({"background": "#fff"});
+    //         flag11 = false
+    //     }
+    //     else
+    //     {
+    //         $(this).css({"background": "#f90"});
+    //         flag11 = true
+    //     }
+    // })
+
+
+    //显示总价
+    if (obj.flag) {
+        sum += obj.price * obj.num;
+        $(".cost").html(sum);
+    }
+    else {
+        $(".cost").html(sum);
+    }
+
+
+})
 
 
 $(function () {
@@ -281,18 +309,18 @@ $(function () {
     total()
 
     // 选中处理
-    $('.cart .confirm-wrapper').click(function () {
+    $('.cnt-h .gds .ckout').click(function () {
         var cartid = $(this).attr('cartid')
-        var $span = $(this).find('span')
+        var $span = $(this).find('label')
 
-        $.get('/axf/changecartstatus/', {'cartid':cartid}, function (response) {
+        $.get('/changecartstatus/', {'cartid': cartid}, function (response) {
             console.log(response)
-            if (response.status){
+            if (response.status) {
                 var isselect = response.isselect
-                if (isselect){
-                    $span.removeClass('no').addClass('glyphicon glyphicon-ok')
+                if (isselect) {
+                    $span.removeClass('no').addClass('select')
                 } else {
-                    $span.removeClass('glyphicon glyphicon-ok').addClass('no')
+                    $span.removeClass('select').addClass('no')
                 }
             }
 
@@ -302,31 +330,31 @@ $(function () {
 
 
     // 全选/取消全选
-    $('.cart .all').click(function () {
+    $('.cnt-h .all').click(function () {
         var isall = $(this).attr('isall')
         isall = (isall == 'false') ? true : false
         $(this).attr('isall', isall)
 
         // 样式显示
-        var $span = $(this).find('span')
+        var $span = $(this).find('label')
 
-        if (isall){
-             $span.removeClass('no').addClass('glyphicon glyphicon-ok')
+        if (isall) {
+            $span.removeClass('no').addClass('allSelect')
         } else {
-            $span.removeClass('glyphicon glyphicon-ok').addClass('no')
+            $span.removeClass('allSelect').addClass('no')
         }
 
 
         // 发起ajax请求
-        $.get('/axf/changecartisall/', {'isall':isall}, function (response) {
+        $.get('/changecartisall/', {'isall': isall}, function (response) {
             console.log(response)
-            if (response.status){
+            if (response.status) {
                 // 遍历
-                $('.cart .confirm-wrapper').each(function () {
-                    if (isall){ // 全选
-                        $(this).find('span').removeClass('no').addClass('glyphicon glyphicon-ok')
+                $('.cnt-h .gds .ckout').each(function () {
+                    if (isall) { // 全选
+                        $(this).find('label').removeClass('no').addClass('select')
                     } else {    // 取消全选
-                        $(this).find('span').removeClass('glyphicon glyphicon-ok').addClass('no')
+                        $(this).find('label').removeClass('select').addClass('no')
                     }
                 })
 
@@ -334,39 +362,60 @@ $(function () {
             }
         })
     })
+    // 删除购物车指定商品列操作
+      $('.cnt-h .gds .delcart').click(function () {
+        var goodsid = $(this).attr('goodsid')
+        var $that = $(this)
+
+        $.get('/subcart/', {'goodsid':goodsid}, function (response) {
+            console.log(response)
+            if (response.status == 1){  // 操作成功
+                // alert('删除成功')
+                location.reload()
+            }
+        })
+    })
+
 
     // 计算总数
     function total() {
         var sum = 0
+        var nums = 0
 
         // 个数 × 单价 【选中】
-        $('.goods').each(function () {
-            var $confirm = $(this).find('.confirm-wrapper')
-            var $content = $(this).find('.content-wrapper')
-
-            if ($confirm.find('.glyphicon-ok').length){ // 选中
+        $('.cnt-h .gds').each(function () {
+            var $confirm = $(this).find('.ckout')
+            var $content = $(this)
+            if ($confirm.find('.select').length) { // 选中
                 var num = $content.find('.num').attr('num')
                 var price = $content.find('.price').attr('price')
 
                 sum += num * price
+                nums += parseInt(num)
             }
         })
 
-        // 显示金额
-        $('.bill .total b').html(parseInt(sum))
+        // 显示总商品数量
+        $('.g-h .h-m-main .h-m-btm .allnum em').html(parseInt(nums))
+        $('.m-gds-f .gds-pay-rgt #choNum').html(parseInt(nums))
+
+        // 显示总钱
+        $('.g-h .h-m-main .h-m-rgt #total').html(parseInt(sum))
+        $('.m-gds-f .gds-pay-rgt .cost').html(parseInt(sum))
     }
 
 
     // 下单
-    $('#generateorder').click(function () {
-        $.get('/axf/generateorder/', function (response) {
+    $('.g-h .h-m-main .h-m-rgt .account').click(function () {
+        $.get('/generateorder/', function (response) {
             console.log(response)
 
             // 订单详情
-            if (response.status == 1){
-                window.open('/axf/orderdetail/' + response.identifier + '/', target='_self')
+            if (response.status == 1) {
+                window.open('/orderdetail/' + response.identifier + '/', target = '_self')
             }
 
         })
     })
 })
+

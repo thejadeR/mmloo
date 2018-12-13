@@ -6,6 +6,7 @@ class UserInfo(models.Model):
     # import random
     # unum = random.randint(0,100000000)
     # db_uname = models.CharField(max_length=40,unique=True,default='用户{}'.format(unum))
+    # 头像
     db_headimg = models.CharField(max_length=150, default='person.png')
 
     db_utel = models.CharField(max_length=20,unique=True)
@@ -14,8 +15,9 @@ class UserInfo(models.Model):
 
     db_token = models.CharField(max_length=256,default='')
 
-
+    # 创建时间
     db_uFirstTime = models.DateTimeField(auto_now=True)
+    # 最后修改时间
     db_uLastTime = models.DateTimeField(auto_now_add=True)
     def __str__(self):
         return '用户电话:{}-创建时间:{}-最后修改时间:{}'.format(self.db_utel,self.db_uFirstTime,self.db_uLastTime)
@@ -49,10 +51,29 @@ class Good(models.Model):
     picture3 = models.ImageField(max_length=255, upload_to='uploadfiles/detailimg')
     picture4 = models.ImageField(max_length=255, upload_to='uploadfiles/detailimg')
 
+    # 3所属分类再再上一层分类
+    good_fffarther = models.CharField(max_length=15,default='')
+    # 2所属分类再上一层分类
+    good_ffarther = models.CharField(max_length=15, default='')
+    # 1商品所属分类
+    good_farther = models.CharField(max_length=15, default='')
+
+    # 商品名字
     good_detail = models.CharField(max_length=100)
+    # 商品说明
+    good_explain = models.CharField(max_length=255,default='')
+
+    # 批发价
     good_price = models.DecimalField(max_digits=10,decimal_places=2)
+    # 零售价
     market_price = models.DecimalField(max_digits=10, decimal_places=2)
-    goodid = models.IntegerField(max_length=10,default=1)
+    # 商品编号
+    goodid = models.IntegerField(default=1)
+
+    # 评论条数
+    good_comment = models.IntegerField(default=0)
+    # 运费
+    good_freight = models.DecimalField(max_digits=10,decimal_places=2)
     def __str__(self):
         return self.good_detail
     class Meta:
@@ -60,43 +81,6 @@ class Good(models.Model):
 
 
 
-#
-# class Goods(models.Model):
-#     num = models.CharField(max_length=20)
-#     name = models.CharField(max_length=255)
-#     price = models.CharField(max_length=50)
-#     mbbprice = models.CharField(max_length=50)
-#     unit = models.CharField(max_length=20)
-#     heading = models.CharField(max_length=255)
-#     pic1 = models.CharField(max_length=255)
-#     pic2 = models.CharField(max_length=255,null=True)
-#     pic3 = models.CharField(max_length=255,null=True)
-#     def __str__(self):
-#         return self.name
-#
-# class Detail(models.Model):
-#     num = models.CharField(max_length=20)
-#     name = models.CharField(max_length=255)
-#     detail = models.CharField(max_length=255)
-#     price = models.CharField(max_length=20)
-#     mmlprice = models.CharField(max_length=20)
-#     # comment = models.CharField(max_length=50)
-#     # place = models.CharField(max_length=255)
-#
-#     headimg = models.CharField(max_length=255)
-#     picnum=models.CharField(max_length=255)
-#     picture1 = models.CharField(max_length=255)
-#     picture2 = models.CharField(max_length=255)
-#     picture3 = models.CharField(max_length=255)
-#     picture4 = models.CharField(max_length=255)
-#
-#     def __str__(self):
-#         return self.name
-
-# class Text(models.Model):
-#     str=HTMLField()
-#
-#
 class Cart(models.Model):
     # 用户
     user = models.ForeignKey(UserInfo)
@@ -109,19 +93,6 @@ class Cart(models.Model):
 
     class Meta:
         db_table = 'mmloo_carts'
-#
-# class Order(models.Model):
-#     user = models.ForeignKey(User)
-#     ordernum=models.CharField(max_length=255)
-#     adv = models.CharField(max_length=255)
-#     status=models.IntegerField(default=0)
-#
-# 22
-#
-# class OrderDetail(models.Model):
-#     ordernum=models.ForeignKey(Order)
-#     good = models.ForeignKey(Detail)
-#     num = models.CharField(max_length=255)
 
 
 

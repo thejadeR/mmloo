@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>用户信息</title>
+    <link rel="stylesheet" href="/static/css/mine.css">
+    <link rel="stylesheet" href="/static/css/bootstrap.css">
+    <script src="/static/js/mine.js"></script>
+</head>
+<body>
+<div class="mine">
+    <div class="user-wrapper">
+        <div class="user-img">
+            <a href="{% url 'mmloo_shop:uploadheadimg' %}">
+                <img src="/static/uploadfiles/headimg/{{ img | default:'person.png' }}" alt="">
+            </a>
+        </div>
+        <div class="user-content">
+            <p>
+                <span class="glyphicon glyphicon-piggy-bank"></span>
+                用户名：
+                <a href="{% url 'mmloo_shop:login' %}">
+                    {{ name | default:'未登录' }}
+                </a>
+            </p>
+
+            <p><a href="{% url 'mmloo_shop:register' %}">注册</a></p>
+            {% if name %}
+                <p class="quit">
+                    <a href="{% url 'mmloo_shop:logout' %}"> 退出登录 </a>
+                </p>
+            {% endif %}
+
+        </div>
+    </div>
+
+    <div class="other">
+        <section>
+            <ul>
+                <li>
+                    <a href="{% url 'mmloo_shop:orderlist' 0 %}">
+                        <dl>
+                            <dt><i class="glyphicon glyphicon-link"></i></dt>
+                            <dd> 待付款</dd>
+                            <span class="badge" style="background: red; color: white">{{ waitpay }}</span>
+                        </dl>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <dl>
+                            <dt><i class="glyphicon glyphicon-phone"></i></dt>
+                            <span class="badge" style="background: red; color: white">{{ paydone }}</span>
+                            <dd> 待收货</dd>
+                        </dl>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <dl>
+                            <dt><i class="glyphicon glyphicon-leaf"></i></dt>
+                            <dd> 待评价</dd>
+                        </dl>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <dl>
+                            <dt><i class="glyphicon glyphicon-jpy"></i></dt>
+                            <dd> 退款/售后</dd>
+                        </dl>
+                    </a>
+                </li>
+            </ul>
+
+        </section>
+
+    </div>
+</div>
+</body>
+</html>
