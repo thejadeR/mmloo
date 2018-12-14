@@ -25,7 +25,7 @@ SECRET_KEY = 'ncegy4(^!)5n!mkv=_z-oh8$2#z8yrx#=_1d#br-r%6yu3$s4$'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition

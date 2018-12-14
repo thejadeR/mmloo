@@ -8,6 +8,7 @@ from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 
 # Create your views here.
+from mmloo_shop.Alipay import alipay
 from mmloo_shop.models import UserInfo, Lunbo, Good, Cart, Order, OrderGoods
 from mysite14 import settings
 
@@ -369,18 +370,18 @@ def appnotify(request):
 
 
 def returenview(request):
-    return redirect('axf:orderdetail',0)
+    return redirect('mmloo_shop:orderdetail',0)
 
 
 def pay(request):
     identifier = request.GET.get('identifier')
-
+    print(identifier)
     # 支付地址
     url = alipay.direct_pay(
         subject='iPhone X[土豪金，64G]', # 订单标题
         out_trade_no=identifier,    # 订单号[axf]
         total_amount=9.9,   # 支付金额
-        return_url='http://112.74.55.3/axf/returenview/'
+        return_url='http://120.78.222.145/mmloo/returenview/'
     )
 
     # 拼接支付网关
