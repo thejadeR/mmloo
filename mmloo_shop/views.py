@@ -90,6 +90,7 @@ def login(request):
             user.db_token = generate_token()
             user.save()
             request.session['token'] = user.db_token
+            # request.session.set_expiry(3600)
             return redirect('mmloo_shop:index')
         else:
             return render(request, 'login.html',context={
@@ -117,6 +118,7 @@ def register(request):
         u.db_token = generate_token()
         u.save()
         request.session['token'] = u.db_token
+        # request.session.set_expiry(3600)
 
         response = redirect('mmloo_shop:index')
         # response.set_cookie('uname', u.db_uname)
@@ -369,8 +371,8 @@ def appnotify(request):
     return JsonResponse({'msg':'success'})
 
 
-def returenview(request):
-    return redirect('mmloo_shop:orderdetail',0)
+def returnview(request):
+    return redirect('mmloo_shop:orderdetail',1)
 
 
 def pay(request):
@@ -380,8 +382,8 @@ def pay(request):
     url = alipay.direct_pay(
         subject='iPhone X[金，128G]', # 订单标题
         out_trade_no=identifier,    # 订单号[mmloo]
-        total_amount=9.9,   # 支付金额
-        return_url='http://120.78.222.145/mmloo/returenview/'
+        total_amount=1.5,   # 支付金额
+        return_url='http://120.78.222.145/mmloo/returnview/'
     )
 
     # 拼接支付网关
