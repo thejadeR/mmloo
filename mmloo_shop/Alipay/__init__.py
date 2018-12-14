@@ -11,6 +11,8 @@ from base64 import decodebytes, encodebytes
 import json
 from mysite14.settings import BASE_DIR
 
+
+
 # 支付宝封装(不需要做任何修改)
 class AliPay(object):
     """
@@ -125,7 +127,7 @@ app_private_key_path = os.path.join(BASE_DIR, 'mmloo_shop/Alipay/ying_yong_si_ya
 alipay_public_key_path = os.path.join(BASE_DIR, 'mmloo_shop/Alipay/zhi_fu_bao_gong_yao.txt')
 # 根据自己申请的进行设置
 alipay = AliPay(
-    appid="2016091800542542",  # 设置签约的appid
+    appid="2016092200571047",  # 设置签约的appid
     app_notify_url="http://120.78.222.145/mmloo/appnotify/",  # 异步支付通知url
     app_private_key_path=app_private_key_path,  # 设置应用私钥
     alipay_public_key_path=alipay_public_key_path,  # 支付宝的公钥，验证支付宝回传消息使用，不是你自己的公钥,
