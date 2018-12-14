@@ -378,8 +378,8 @@ def pay(request):
     print(identifier)
     # 支付地址
     url = alipay.direct_pay(
-        subject='iPhone X[土豪金，64G]', # 订单标题
-        out_trade_no=identifier,    # 订单号[axf]
+        subject='iPhone X[金，128G]', # 订单标题
+        out_trade_no=identifier,    # 订单号[mmloo]
         total_amount=9.9,   # 支付金额
         return_url='http://120.78.222.145/mmloo/returenview/'
     )

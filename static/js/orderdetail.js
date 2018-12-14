@@ -1,5 +1,5 @@
 $(function () {
-    $('#pay').click(function () {
+    $('.orderdetail .bill #pay').click(function () {
         var identifier = $(this).attr('identifier')
         $.get('/pay/', {'identifier':identifier}, function (response) {
             console.log(response)
